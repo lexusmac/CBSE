@@ -31,6 +31,7 @@ public class Comparaboo {
         js.executeScript("window.scrollBy(0,350)", "");
 
         WebElement resultStores = driver.findElement(By.xpath(".//*[@id='list-table-responsive']/table/tbody/tr[3]/td[6]/div/div/div[1]/a[2]/span\""));
+
         //WebElement resultStores = driver.findElement(By.className("more-stores tablet-phone-hide openComprisonBox no_report"));
         resultStores.click();
 
