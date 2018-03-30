@@ -6,7 +6,8 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.concurrent.TimeUnit;
-
+import java.util.List;
+//import org.testng.Assert;
 
 public class Comparaboo {
     public static void main(String[] args) {
@@ -19,21 +20,37 @@ public class Comparaboo {
 
         element.sendKeys("laptops");
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-//        element.submit(); click Enter
-        WebElement resultSearch = driver.findElement(By.className("search-products-item"));
-        resultSearch.click();
+        //  element.submit(); click Enter
+        WebElement resultSearch = driver.findElement(By.className("search-products-item")); //ищем результат поиска
+        resultSearch.click(); //выбираем первый результат
 
-        WebElement titleResult = driver.findElement(By.xpath(".//*[@id='maintitle']/span"));
+        WebElement titleResult = driver.findElement(By.xpath(".//*[@id='maintitle']/span")); //находим титл на странице
         String textTitle = titleResult.getText();
-        System.out.println("We have found: " + textTitle);
+        System.out.println("We have found: " + textTitle); //output the result title
 
         JavascriptExecutor js = (JavascriptExecutor)driver;
-        js.executeScript("window.scrollBy(0,350)", "");
+        js.executeScript("window.scrollBy(0,350)", ""); //scroll down
 
-        WebElement resultStores = driver.findElement(By.xpath(".//*[@id='list-table-responsive']/table/tbody/tr[3]/td[6]/div/div/div[1]/a[2]/span\""));
+        //WebElement number_stores = driver.findElement(By.xpath("//a[@class='more-stores tablet-phone-hide openComprisonBox no_report']"));
+        WebElement number_stores = driver.findElement(By.cssSelector("a.more-stores.tablet-phone-hide.openComprisonBox.no_report"));
+        String numberstores = number_stores.getText();
+        String numberOfStores = numberstores.replaceAll("^\\D*(\\d+).*", "$1");
+        System.out.println(numberOfStores); //find number Of Stores
 
-        //WebElement resultStores = driver.findElement(By.className("more-stores tablet-phone-hide openComprisonBox no_report"));
-        resultStores.click();
+        WebElement findId = driver.findElement(By.cssSelector("ul.compare-list"));
+        String resultID = findId.getAttribute("data-product-id");
+        System.out.println(resultID); //get value of data-product-id
+
+        //@Test
+        List<WebElement> lst = driver.findElements(By.xpath("//*[contains(@data-click-product, '" + resultID + "') ]"));
+        int size = (lst.size())-1; //get count of all ID with resultID
+        System.out.println(size);
+        //Assert.assertEquals(numberOfStores, size);
+
+        WebElement stores = driver.findElement(By.cssSelector("a.more-stores.tablet-phone-hide.openComprisonBox.no_report"));
+        stores.click();
+
+        // or Xpath:// driver.findElement(By.xpath("//a[@class='more-stores tablet-phone-hide openComprisonBox no_report']")).click();
 
         driver.quit();
     }
