@@ -12,7 +12,7 @@ public class TestComparaboo {
             ChromeOptions options = new ChromeOptions();
             options.addArguments("--start-maximized", "--disable-cache");
             driver = new ChromeDriver(options);
-            //driver.manage().window().maximize(); перенес в настройки
+            driver.get("http://www.comparaboo.com");
         }
         @AfterClass
         public void tearDown() throws InterruptedException {

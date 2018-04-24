@@ -1,5 +1,7 @@
 import static org.testng.Assert.*;
 
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.annotations.DataProvider;
@@ -8,12 +10,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.JavascriptExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class CB_Test extends TestComparaboo {
 
         @Test
         public void test1() throws InterruptedException {
-            driver.get("http://www.comparaboo.com");
             WebElement MainTitle = driver.findElement(By.xpath("html/body/div[1]/div[2]/div/h1")); //находим титл на странице
             //WebElement MainTitle = driver.findElement(By.xpath("html/head/title")); //находим титл на странице ???
             String textMainTitle = MainTitle.getText();
@@ -43,24 +45,27 @@ public class CB_Test extends TestComparaboo {
             JavascriptExecutor js = (JavascriptExecutor) driver;
             js.executeScript("window.scrollBy(0,350)", ""); //scroll down
 
-            //WebElement number_stores = driver.findElement(By.xpath("//a[@class='more-stores tablet-phone-hide openComprisonBox no_report']"));
+
             WebElement number_stores = driver.findElement(By.cssSelector("a.more-stores.tablet-phone-hide.openComprisonBox.no_report"));
             String numberstores = number_stores.getText();
             String numberOfStores = numberstores.replaceAll("^\\D*(\\d+).*", "$1");
             int IntNumberOfStores = Integer.parseInt(numberOfStores);
 
-            WebElement findId = driver.findElement(By.cssSelector("ul.compare-list"));
-            String resultID = findId.getAttribute("data-product-id"); //get value of data-product-id
-
-            List<WebElement> lst = driver.findElements(By.xpath("//*[contains(@data-click-product, '" + resultID + "') ]"));
-            //System.out.println(lst.size()); //temp
-            int size = ((lst.size()) - 1); //get count of all ID with resultID
-            System.out.println("Test#3 We have found: " + size + " of the " +  IntNumberOfStores + " stores"); //output the result title
-            Assert.assertEquals(IntNumberOfStores, size);
-
             WebElement stores = driver.findElement(By.cssSelector("a.more-stores.tablet-phone-hide.openComprisonBox.no_report"));
             stores.click();
             Thread.sleep(1000);
+
+            WebElement findId = driver.findElement(By.cssSelector("#globalPriceBox .compare-list"));
+            //WebElement findId = driver.findElement(By.xpath(""));
+            String resultID = findId.getAttribute("data-product-id"); //get value of data-product-id
+            //System.out.println(resultText);
+
+            List<WebElement> lst = driver.findElements(By.xpath("//*[contains(@data-click-product, '" + resultID + "') ]"));
+            //List<WebElement> lst = driver.findElements(By.xpath("//*[contains(@data-click-product, '" + resultID + "') and contains(@class, 'clickout clickout j-product-view compare-list-shop product-offer-js')]"));
+            //System.out.println(lst.size()); //temp
+            int size = (((lst.size()) - 1)/2); //get count of all ID with resultID
+            System.out.println("Test#3 We have found: " + size + " of the " +  IntNumberOfStores + " stores"); //output the result title
+            Assert.assertEquals(IntNumberOfStores, size);
         }
 }
 
